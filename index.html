@@ -1,148 +1,25 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>页面跳转中...</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-        }
-        
-        .container {
-            text-align: center;
-            max-width: 600px;
-            padding: 40px;
-        }
-        
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-        }
-        
-        .content {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-        
-        .loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 30px 0;
-        }
-        
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top: 5px solid white;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .info {
-            font-size: 1.1rem;
-            margin-top: 20px;
-        }
-        
-        .redirect-url {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 10px;
-            border-radius: 5px;
-            margin: 15px 0;
-            word-break: break-all;
-            font-family: monospace;
-        }
-        
-        .countdown {
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-top: 15px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="content">
-            <h1>页面跳转中</h1>
-            <div class="loading">
-                <div class="spinner"></div>
-            </div>
-            <div class="info">
-                正在为您准备精彩内容，请稍候...
-            </div>
-            <div class="redirect-url" id="targetUrl"></div>
-            <div class="countdown">页面将在 <span id="count">3</span> 秒后自动跳转</div>
-        </div>
-    </div>
+<?php
+// 获取当前请求的完整路径
+$request_uri = $_SERVER['REQUEST_URI'];
 
-    <script>
-        // 获取当前完整URL
-        function getCurrentUrl() {
-            return window.location.href;
-        }
-        
-        // 从URL中提取ID
-        function extractIdFromUrl(url) {
-            // 匹配 /abc/ 后面的所有内容
-            const match = url.match(/\/abc\/([^?#]+)/);
-            return match ? match[1] : '';
-        }
-        
-        // 执行跳转
-        function redirect() {
-            const currentUrl = getCurrentUrl();
-            const id = extractIdFromUrl(currentUrl);
-            const targetDomain = 'https://B域名.com'; // 请替换为实际域名
-            
-            let targetUrl;
-            if (id) {
-                targetUrl = `${targetDomain}/${id}`;
-            } else {
-                targetUrl = targetDomain;
-            }
-            
-            // 显示目标URL
-            document.getElementById('targetUrl').textContent = `跳转目标: ${targetUrl}`;
-            
-            // 倒计时显示
-            let count = 3;
-            const countElement = document.getElementById('count');
-            const countdown = setInterval(() => {
-                count--;
-                countElement.textContent = count;
-                if (count <= 0) {
-                    clearInterval(countdown);
-                    // 执行跳转
-                    window.location.replace(targetUrl);
-                }
-            }, 1000);
-        }
-        
-        // 页面加载后执行跳转
-        window.onload = redirect;
-    </script>
-</body>
-</html>
+// 提取/abc/后面的内容
+if (preg_match('#/abc/(.+)$#', $request_uri, $matches)) {
+    $id = $matches[1];
+} else {
+    $id = '';
+}
+
+// 目标域名
+$target_domain = 'https://B域名.com'; // 请替换为实际域名
+
+// 构建目标URL
+if (!empty($id)) {
+    $target_url = $target_domain . '/' . $id;
+} else {
+    $target_url = $target_domain;
+}
+
+// 执行跳转
+header('Location: ' . $target_url, true, 302);
+exit;
+?>
