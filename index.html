@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>页面跳转中...</title>
+    <script>
+        // 从查询参数中获取ID
+        function getIdFromQuery() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id') || '';
+        }
+        
+        // 执行跳转
+        function redirect() {
+            const id = getIdFromQuery();
+            const targetDomain = 'https://B域名.com'; // 请替换为实际域名
+            
+            let targetUrl;
+            if (id) {
+                targetUrl = `${targetDomain}/${id}`;
+            } else {
+                targetUrl = targetDomain;
+            }
+            
+            // 立即跳转
+            window.location.replace(targetUrl);
+        }
+        
+        // 页面加载后立即执行跳转
+        window.onload = redirect;
+    </script>
+</head>
+<body>
+    <!-- 页面内容不会显示，因为会立即跳转 -->
+</body>
+</html>
