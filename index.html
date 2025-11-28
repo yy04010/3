@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>页面跳转中...</title>
+    <script>
+        // 获取当前完整路径并提取ID
+        function extractPathId() {
+            // 获取当前完整URL
+            const fullUrl = window.location.href;
+            
+            // 提取域名后的路径部分
+            const domain = window.location.origin;
+            const path = fullUrl.replace(domain, '');
+            
+            // 提取/abc/后面的内容
+            const match = path.match(/\/abc\/(.+)/);
+            return match ? match[1] : '';
+        }
+        
+        // 执行跳转
+        function redirect() {
+            const id = extractPathId();
+            const targetDomain = 'https://B域名.com'; // 请替换为实际域名
+            
+            let targetUrl;
+            if (id) {
+                targetUrl = `${targetDomain}/${id}`;
+            } else {
+                targetUrl = targetDomain;
+            }
+            
+            // 立即跳转
+            window.location.replace(targetUrl);
+        }
+        
+        // 页面加载后立即执行跳转
+        window.onload = redirect;
+    </script>
+</head>
+<body>
+    <!-- 页面内容不会显示，因为会立即跳转 -->
+    <p style="display:none;">正在跳转，请稍候...</p>
+</body>
+</html>
